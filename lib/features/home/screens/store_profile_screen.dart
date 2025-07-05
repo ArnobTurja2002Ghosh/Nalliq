@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
@@ -456,13 +457,29 @@ class _StoreProfileScreenState extends State<StoreProfileScreen> {
     storeProvider.toggleFriend1(widget.storeUserId, currentUserId, action);
   }
 
-  void _messageStore(AppUser store) {
+  void _messageStore(AppUser store) async {
     // TODO: Implement messaging functionality
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         content: Text('Messaging with ${store.displayName} - Coming soon!'),
         backgroundColor: AppColors.primaryOrange,
       ),
+    );
+    // Somewhere in your code (e.g., before pushing the route):
+    final userDoc =
+        await FirebaseFirestore.instance
+            .collection('users')
+            .doc(store.id)
+            .get();
+
+    final storeEmail = userDoc.data()!['email'] as String? ?? "0.0";
+    final storeName = userDoc.data()!['displayName'] as String? ?? "0.0";
+
+    // Then navigate:
+    context.pushNamed(
+      'chat',
+      pathParameters: {'storeUserId': store.id},
+      extra: {'email': storeEmail, 'name': storeName},
     );
   }
 }

@@ -1,23 +1,25 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:hive_flutter/hive_flutter.dart';
-import 'package:provider/provider.dart';
 import 'package:openfoodfacts/openfoodfacts.dart';
-import 'core/theme/app_theme.dart';
-import 'core/constants/app_strings.dart';
+import 'package:provider/provider.dart';
+
 import 'core/config/secure_firebase_options.dart';
+import 'core/constants/app_strings.dart';
 import 'core/localization/app_localizations.dart';
+import 'core/theme/app_theme.dart';
 import 'features/auth/providers/auth_provider.dart';
+import 'features/cart/providers/cart_provider.dart';
+import 'features/exchange/providers/exchange_provider.dart';
 import 'features/home/providers/home_provider.dart';
 import 'features/home/providers/store_provider.dart';
 import 'features/items/providers/item_provider.dart';
-import 'features/cart/providers/cart_provider.dart';
-import 'features/exchange/providers/exchange_provider.dart';
-import 'features/profile/providers/profile_provider.dart'; 
+import 'features/message/providers/message_service.dart';
+import 'features/navigation/app_router.dart';
+import 'features/profile/providers/profile_provider.dart';
 import 'features/settings/providers/settings_provider.dart';
 import 'features/trust/providers/trust_score_provider.dart';
-import 'features/navigation/app_router.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -26,10 +28,10 @@ void main() async {
   await Firebase.initializeApp(
     options: await SecureFirebaseOptions.currentPlatform,
   );
-
+  print("init hive");
   // Initialize Hive
   await Hive.initFlutter();
-
+  print("hive done");
   // Configure Open Food Facts API user agent globally
   try {
     OpenFoodAPIConfiguration.userAgent = UserAgent(
@@ -65,6 +67,7 @@ class MyApp extends StatelessWidget {
           create: (_) => SettingsProvider()..loadSettings(),
         ),
         ChangeNotifierProvider(create: (_) => TrustScoreProvider()),
+        ChangeNotifierProvider(create: (_) => MessageService()),
       ],
       child: Consumer<SettingsProvider>(
         builder: (context, settingsProvider, child) {
