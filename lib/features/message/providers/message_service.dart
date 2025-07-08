@@ -40,12 +40,13 @@ class MessageService extends ChangeNotifier {
   }) {
     List<String> chatId = [currentUserId, receiverUserId];
     chatId.sort();
+    print(chatId.join("*"));
 
     return _fireStore
         .collection('chat')
         .doc(chatId.join("*"))
         .collection('messages')
-        .orderBy('timestamp', descending: false)
+        .orderBy('timestamp1', descending: false)
         .snapshots();
   }
 }

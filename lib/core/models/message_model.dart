@@ -17,7 +17,7 @@ class MessageModel {
     return {
       'message': message,
       'senderId': senderId,
-      'timestamp': timestamp,
+      'timestamp1': timestamp,
       'receiverId': receiverId,
       'senderEmail': senderEmail,
     };

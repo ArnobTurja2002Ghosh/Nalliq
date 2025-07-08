@@ -459,12 +459,12 @@ class _StoreProfileScreenState extends State<StoreProfileScreen> {
 
   void _messageStore(AppUser store) async {
     // TODO: Implement messaging functionality
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text('Messaging with ${store.displayName} - Coming soon!'),
-        backgroundColor: AppColors.primaryOrange,
-      ),
-    );
+    // ScaffoldMessenger.of(context).showSnackBar(
+    //   SnackBar(
+    //     content: Text('Messaging with ${store.displayName} - Coming soon!'),
+    //     backgroundColor: AppColors.primaryOrange,
+    //   ),
+    // );
     // Somewhere in your code (e.g., before pushing the route):
     final userDoc =
         await FirebaseFirestore.instance

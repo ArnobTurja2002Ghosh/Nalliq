@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
@@ -59,7 +60,7 @@ class _ChatScreenState extends State<ChatScreen> {
   }
 
   void sendMessage() async {
-    final messageService = Provider.of<MessageService>(context);
+    final messageService = Provider.of<MessageService>(context, listen: false);
     final authProvider = Provider.of<AuthProvider>(context, listen: false);
     if (_messageController.text.isNotEmpty) {
       await messageService.sendMessage(
@@ -134,18 +135,22 @@ class _ChatScreenState extends State<ChatScreen> {
                 WidgetsBinding.instance.addPostFrameCallback(
                   (_) => _scrollToBottom(),
                 );
-
+                print("going to print all chats");
                 return Padding(
                   padding: const EdgeInsets.all(10.0),
                   child: ListView(
                     controller: _scrollController,
                     children:
                         snapshot.data!.docs.map((document) {
+                          print(document.id);
+                          print("hi doc");
                           final Map<String, dynamic> data =
                               document.data() as Map<String, dynamic>;
+                          print(data['timestamp1']);
                           return MessageBubble(
                             message: data['message'],
-                            timestamp: data['timestamp'],
+                            timestamp:
+                                (data['timestamp1'] as Timestamp).toDate(),
                             userName:
                                 data['senderEmail'].toString().split("@")[0],
                             alignment:
